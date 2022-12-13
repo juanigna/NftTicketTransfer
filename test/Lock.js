@@ -26,9 +26,9 @@ describe("Lock", function () {
       let createTxn = await NftTransferInstance.createPersonalizedNFTTicket(ticketPrize);
       await createTxn.wait();
 
-      let nftPrice = await NftTransferInstance.tickets(0).ticketPrize;
+      let nftPrice = await NftTransferInstance.tickets(0);
 
-      expect(nftPrice).to.equal(ticketPrize);
+      expect(nftPrice.ticketPrize).to.equal(ticketPrize);
     })
   })
 });
