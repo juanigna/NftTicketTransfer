@@ -12,15 +12,16 @@ contract NFTTicketTransfer is Ownable {
     address splliterAddress;
 
     NFTicket nftTicket;
-    constructor(address _splitter) {
-        splliterAddress = _splitter;
-        nftTicket = new NFTicket(_splitter);
+    constructor(address _erc721) {
+  
+        nftTicket = new NFTicket(_erc721);
     }
 
-    function sellTicket(uint256 tokenID, uint256 _ticketPrice) public {
-        require(nftTicket.ownerOf(tokenID) == msg.sender, "You don't own this NFT"); 
+    function sellTicket(uint256 _tokenId, uint256 _ticketPrice) public {
+        require(nftTicket.getTicketOwner(_tokenId) == msg.sender, "You don't own this NFT"); 
+        require(false, "Hey");
 
-        nftTicket.setTicketPrice(tokenID, _ticketPrice);
+        nftTicket.setTicketPrice(_tokenId, _ticketPrice);
     }
     
     function transferTicket(uint256 tokenID, address _to) public {

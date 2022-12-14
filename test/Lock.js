@@ -34,7 +34,7 @@ describe("Lock", function () {
       await nftTokenCreatorInstance.deployed();
 
       NftTransferFactory = await ethers.getContractFactory("NFTTicketTransfer");
-      NftTransferInstance = await NftTransferFactory.deploy(sigAddrs.deployer);
+      NftTransferInstance = await NftTransferFactory.deploy(nftTokenCreatorInstance.address);
       await NftTransferInstance.deployed();
     });
   });
