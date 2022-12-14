@@ -34,11 +34,11 @@ contract NFTicket is ERC721Royalty, Ownable {
     }
 
     function createPersonalizedNFTTicket(uint256 _price, uint256 _nftDeadlineTransfer) public onlyOwner {
+        uint _tokenCount = tokenId.current();
+        _mint(msg.sender, _tokenCount);
+        tickets[_tokenCount]= Ticket(_price, _nftDeadlineTransfer);
         tokenId.increment();
-        uint tokenID = tokenId.current();
-        _mint(msg.sender, tokenID);
-        tickets[tokenId.current()]= Ticket(_price, _nftDeadlineTransfer);
-        emit personalizedNFTTicket(tokenId.current(), _price);       
+        emit personalizedNFTTicket(_tokenCount, _price);       
     }
 
     function getTicketPrice(uint256 _ticketId) public view returns(uint256){

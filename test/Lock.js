@@ -45,7 +45,7 @@ describe("Lock", function () {
       let createTxn = await nftTokenCreatorInstance.createPersonalizedNFTTicket(ticketPrize, 72);
       await createTxn.wait();
 
-      let nftTicket = await nftTokenCreatorInstance.tickets(1);
+      let nftTicket = await nftTokenCreatorInstance.tickets(0);
 
       expect(nftTicket.ticketPrice).to.equal(ticketPrize);
       expect(nftTicket.nftDeadlineTransfer).to.equal(72);
@@ -54,7 +54,7 @@ describe("Lock", function () {
 
     it("Should put the nft ticket to sell", async function(){
       const ticketPrize = ethers.utils.parseUnits("1.0", "ether");
-      let sellTicket = await NftTransferInstance.sellTicket(1, ticketPrize);
+      let sellTicket = await NftTransferInstance.sellTicket(0, ticketPrize);
       await sellTicket.wait();
     })
 
