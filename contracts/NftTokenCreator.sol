@@ -29,12 +29,12 @@ contract NFTicket is ERC721Royalty, Ownable {
         _setDefaultRoyalty(splitter, 5000);
     }
 
-    function createPersonalizedNFTTicket(uint256 _price, uint256 _nftDeadlineTransfer) public onlyOwner {
+    function createPersonalizedNFTTicket(uint256 _nftDeadlineTransfer) public onlyOwner {
         uint _tokenCount = tokenCounter.current();
         _mint(msg.sender, _tokenCount);
-        tickets[_tokenCount]= Ticket(_price, _nftDeadlineTransfer);
+        tickets[_tokenCount]= Ticket(0, _nftDeadlineTransfer);
         tokenCounter.increment();
-        emit personalizedNFTTicket(_tokenCount, _price);       
+        emit personalizedNFTTicket(_tokenCount, 0);       
     }
 
     function getTicketPrice(uint256 _ticketId) public view returns(uint256){
@@ -43,6 +43,7 @@ contract NFTicket is ERC721Royalty, Ownable {
 
     function setTicketPrice(uint256 _ticketId, uint256 _ticketPrice) public {
         require(ownerOf(_ticketId) == msg.sender, "Caller is not the owner of the token");
+        require (ownerOf(_ticketId)== tx.origin);
         require(tickets[_ticketId].nftDeadlineTransfer > 0, "The ticket doesn't exists");
         tickets[_ticketId].ticketPrice = _ticketPrice;
     }
@@ -58,6 +59,7 @@ contract NFTicket is ERC721Royalty, Ownable {
         uint256 batchSize
     ) internal virtual override {
         require(batchSize == 1, "Incorrect batch size");
+        tickets[firstTokenID].ticketPrice = 0;
         super._beforeTokenTransfer(from,to,firstTokenID, batchSize);
     }
 }

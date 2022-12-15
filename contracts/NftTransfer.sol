@@ -13,11 +13,15 @@ contract NFTTicketTransfer is Ownable {
     NFTicket public nftTicket;
     constructor(address _erc721) {
   
-        nftTicket = new NFTicket(_erc721);
+        nftTicket = NFTicket(_erc721);
+    }
+
+    function createTicket(uint256 timestamp) public {
+        nftTicket.createPersonalizedNFTTicket(timestamp);
     }
 
     function sellTicket(uint256 _tokenId, uint256 _ticketPrice) public {
-        require(nftTicket.getTicketOwner(_tokenId) == msg.sender, "You don't own this NFT"); 
+        require(nftTicket.ownerOf(_tokenId) == msg.sender, "You don't own this NFT"); 
 
         nftTicket.setTicketPrice(_tokenId, _ticketPrice);
     }
