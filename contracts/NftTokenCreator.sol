@@ -12,7 +12,7 @@ contract NFTicket is ERC721Royalty, Ownable {
     event personalizedNFTTicket(uint256 _id, uint256 price);
 
     using Counters for Counters.Counter;
-    Counters.Counter tokenId;
+    Counters.Counter tokenCounter;
 
     address splitter;
 
@@ -29,15 +29,11 @@ contract NFTicket is ERC721Royalty, Ownable {
         _setDefaultRoyalty(splitter, 5000);
     }
 
-    function mint(address _to, uint256 _id) public{
-        _mint(_to, _id);
-    }
-
     function createPersonalizedNFTTicket(uint256 _price, uint256 _nftDeadlineTransfer) public onlyOwner {
-        uint _tokenCount = tokenId.current();
+        uint _tokenCount = tokenCounter.current();
         _mint(msg.sender, _tokenCount);
         tickets[_tokenCount]= Ticket(_price, _nftDeadlineTransfer);
-        tokenId.increment();
+        tokenCounter.increment();
         emit personalizedNFTTicket(_tokenCount, _price);       
     }
 
@@ -46,6 +42,8 @@ contract NFTicket is ERC721Royalty, Ownable {
     }
 
     function setTicketPrice(uint256 _ticketId, uint256 _ticketPrice) public {
+        require(ownerOf(_ticketId) == msg.sender, "Caller is not the owner of the token");
+        require(tickets[_ticketId].nftDeadlineTransfer > 0, "The ticket doesn't exists");
         tickets[_ticketId].ticketPrice = _ticketPrice;
     }
 

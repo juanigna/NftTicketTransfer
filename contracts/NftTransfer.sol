@@ -9,9 +9,8 @@ import "./NftTokenCreator.sol";
 contract NFTTicketTransfer is Ownable {
     event approveNFTTicketTransfer(address _from, address _to, uint256 id, uint256 timestamp);
 
-    address splliterAddress;
-
-    NFTicket nftTicket;
+   
+    NFTicket public nftTicket;
     constructor(address _erc721) {
   
         nftTicket = new NFTicket(_erc721);
@@ -19,15 +18,13 @@ contract NFTTicketTransfer is Ownable {
 
     function sellTicket(uint256 _tokenId, uint256 _ticketPrice) public {
         require(nftTicket.getTicketOwner(_tokenId) == msg.sender, "You don't own this NFT"); 
-        require(false, "Hey");
 
         nftTicket.setTicketPrice(_tokenId, _ticketPrice);
     }
     
-    function transferTicket(uint256 tokenID, address _to) public {
-        require(nftTicket.getTicketPrice(tokenID) > 0, "This ticket can't be bought at the moment");
+    function transferTicket(uint256 _tokenId, address _to) public {
 
-        nftTicket.safeTransferFrom(nftTicket.ownerOf(tokenID), _to, tokenID);
-        emit approveNFTTicketTransfer(nftTicket.ownerOf(tokenID), _to, tokenID, block.timestamp);
+        nftTicket.safeTransferFrom(nftTicket.getTicketOwner(_tokenId), _to, _tokenId);
+        emit approveNFTTicketTransfer(nftTicket.getTicketOwner(_tokenId), _to, _tokenId, block.timestamp);
     }
 }

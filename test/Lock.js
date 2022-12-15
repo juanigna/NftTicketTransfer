@@ -47,8 +47,11 @@ describe("Lock", function () {
 
       let nftTicket = await nftTokenCreatorInstance.tickets(0);
 
+      let tokenOwner = await nftTokenCreatorInstance.getTicketOwner(0);
+
       expect(nftTicket.ticketPrice).to.equal(ticketPrize);
       expect(nftTicket.nftDeadlineTransfer).to.equal(72);
+      expect(tokenOwner).to.equal(sigAddrs.deployer);
 
     })
 
@@ -58,12 +61,12 @@ describe("Lock", function () {
       await sellTicket.wait();
     })
 
-    // it("Should allow to buy an ticket", async function(){
-    //   let approveTx = await nftTokenCreatorInstance.approve(sigAddrs.buyer, 1);
-    //   await approveTx.wait();
+    it("Should allow to buy an ticket", async function(){
+      let approveTx = await nftTokenCreatorInstance.approve(sigAddrs.buyer, 0);
+      await approveTx.wait();
 
-    //   let approveAndSelltx = await NftTransferInstance.approveTx(1, sigAddrs.buyer);
-    //   await approveAndSelltx.wait();
-    // })
+      let approveAndSelltx = await NftTransferInstance.transferTicket(0, sigAddrs.buyer);
+      await approveAndSelltx.wait();
+    })
   })
 });
