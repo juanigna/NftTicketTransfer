@@ -112,19 +112,5 @@ describe("Lock", function () {
       // expect(tokenOwner).to.equal(sigAddrs.deployer);
 
     })
-
-    // it("Should put the nft ticket to sell", async function(){
-    //   const ticketPrize = ethers.utils.parseUnits("1.0", "ether");
-    //   let sellTicket = await NftTransferInstance.sellTicket(0, ticketPrize);
-    //   await sellTicket.wait();
-    // })
-
-    // it("Should allow to buy an ticket", async function(){
-    //   let approveTx = await nftTokenCreatorInstance.approve(sigAddrs.buyer, 0);
-    //   await approveTx.wait();
-
-    //   let approveAndSelltx = await NftTransferInstance.transferTicket(0, sigAddrs.buyer);
-    //   await approveAndSelltx.wait();
-    // })
   })
 });
