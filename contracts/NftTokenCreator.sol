@@ -52,6 +52,14 @@ contract NFTicket is ERC721Royalty, Ownable {
         return ownerOf(_tokenId);
     }
 
+    function isOnSale(uint256 _tokenId) public view returns(bool){
+        if(tickets[_tokenId].ticketPrice > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function _beforeTokenTransfer(
         address from,
         address to,

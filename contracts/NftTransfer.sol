@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./NftTokenCreator.sol";
 
 contract NFTTicketTransfer is Ownable {
@@ -11,8 +12,11 @@ contract NFTTicketTransfer is Ownable {
 
    
     NFTicket public nftTicket;
-    constructor(address _erc721) {
-  
+    IERC20 FakeUSDtoken;
+    address splitter;
+
+    constructor(address _erc721, address _erc20) {
+        FakeUSDtoken = IERC20(_erc20);
         nftTicket = NFTicket(_erc721);
     }
 
@@ -27,6 +31,11 @@ contract NFTTicketTransfer is Ownable {
     }
     
     function transferTicket(uint256 _tokenId, address _to) public {
+        require(!nftTicket.isOnSale(_tokenId), "Token is not open to sell");
+        require(FakeUSDtoken.balanceOf(msg.sender) >= nftTicket.getTicketPrice(_tokenId));
+
+        FakeUSDtoken.transferFrom(msg.sender, nftTicket.ownerOf(_tokenId), nftTicket.getTicketPrice(_tokenId)*95/100);
+        FakeUSDtoken.transferFrom(msg.sender, splitter,nftTicket.getTicketPrice(_tokenId)*5/100);
 
         nftTicket.safeTransferFrom(nftTicket.getTicketOwner(_tokenId), _to, _tokenId);
         emit approveNFTTicketTransfer(nftTicket.getTicketOwner(_tokenId), _to, _tokenId, block.timestamp);
